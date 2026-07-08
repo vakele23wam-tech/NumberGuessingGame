@@ -1,55 +1,110 @@
-﻿namespace NumberGuessingGame
+﻿using System.ComponentModel.Design;
+
+namespace NumberGuessingGame
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            int maximum = 0;
-            Console.WriteLine("What difficulty would you like? (E), (M), (H) ?");
-            string difficulty = Console.ReadLine();
-            if (difficulty == "E")
+            bool gameOver = false;
+            bool inputValid = false;
+
+            while (!gameOver)
             {
-                maximum = 10;
-            }
-            else if (difficulty == "M")
-            {
-                maximum = 50;
-            }
-            else
-            {
-                maximum = 1000;
-            }
+                int maximum = 0;
+                string difficulty = string.Empty;
 
-            NumberGuessing numberGuessing = new NumberGuessing(1, maximum);
-
-            bool guessed = false;
-            while (!guessed)
-            {
-                Console.WriteLine("Please enter your guess");
-                string guesss = Console.ReadLine();
-                GuessResult result = numberGuessing.MakeGuess(int.Parse(guesss));
-
-
-                if (result == GuessResult.TooLow)
+                while (!inputValid)
                 {
-                    Console.WriteLine("Your guess is too low, please try again.");
+                    Console.WriteLine("What difficulty would you like? (E), (M), (H) ?");
+                    difficulty = Console.ReadLine();
+                    difficulty = difficulty.ToUpper();
+
+                    if ((difficulty == "E") || (difficulty == "M") || (difficulty == "H"))
+                    {
+                        inputValid = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please type either (E), (M) or (H)");
+                        inputValid = false;
+                    }
                 }
-                else if (result == GuessResult.TooHigh)
-                {
-                    Console.WriteLine("Your guess is too high, please try again.");
-                }
-                else if (result == GuessResult.Correct)
-                {
-                    Console.WriteLine("Well done, you are correct!");
-                    guessed = true;
-                }
-                else if (result == GuessResult.OutofLimits)
-                {
-                    Console.WriteLine("Your guess is out of range, are you kidding me? Please try again");
+
+                    if (difficulty == "E")
+                    {
+                        maximum = 10;
+                    }
+                    else if (difficulty == "M")
+                    {
+                        maximum = 50;
+                    }
+                    else
+                    {
+                        maximum = 1000;
+                    }
+
+                    NumberGuessing numberGuessing = new NumberGuessing(1, maximum);
+
+                    bool guessed = false;
+                    while (!guessed)
+                    {
+                        Console.WriteLine("Please enter your guess");
+                        string guess = Console.ReadLine();
+                        GuessResult result = numberGuessing.MakeGuess(int.Parse(guess));
+
+
+                        if (result == GuessResult.TooLow)
+                        {
+                            Console.WriteLine("Your guess is too low, please try again.");
+                        }
+                        else if (result == GuessResult.TooHigh)
+                        {
+                            Console.WriteLine("Your guess is too high, please try again.");
+                        }
+                        else if (result == GuessResult.Correct)
+                        {
+                            Console.WriteLine("Well done, you are correct!");
+                            guessed = true;
+                        }
+                        else if (result == GuessResult.OutofLimits)
+                        {
+                            Console.WriteLine("Your guess is out of range, are you kidding me? Please try again");
+
+                        }
+                    }
+
+                    string playAgain = string.Empty;
+                    while (!inputValid)
+                    {
+                        Console.WriteLine("D you want to play again? (Y) or (N)?");
+                        playAgain = Console.ReadLine();
+                        playAgain = playAgain.ToUpper();
+
+                        if ((playAgain == "Y") || (playAgain == "N"))
+                        {
+                            inputValid = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input, please enter (Y) or (N)");
+                            inputValid = false;
+                        }
+                    }
+                    if (playAgain == "N")
+                    {
+                        gameOver = true;
+                    }
+                    else if (playAgain == "Y")
+                    {
+                        gameOver = false;
+                    }
+
 
                 }
             }
+        }
     }
-}
-}
+
+
 
